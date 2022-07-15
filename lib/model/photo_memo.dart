@@ -1,3 +1,5 @@
+import 'package:lesson3/viewscreen/detailedview_screen.dart';
+
 enum PhotoSource { camera, gallery }
 
 enum DocKeyPhotoMemo {
@@ -8,7 +10,8 @@ enum DocKeyPhotoMemo {
   photoURL,
   timestamp,
   imageLabels,
-  sharedwith
+  sharedwith,
+  favorite
 }
 
 class PhotoMemo {
@@ -21,6 +24,8 @@ class PhotoMemo {
   DateTime? timestamp;
   late List<dynamic> imageLabels;
   late List<dynamic> sharedwith;
+  late bool favorite;
+  EmageLabel? emageLabel;
 
   PhotoMemo({
     this.docId,
@@ -30,6 +35,8 @@ class PhotoMemo {
     this.photoFilename = '',
     this.photoURL = '',
     this.timestamp,
+    this.favorite = false,
+    this.emageLabel = EmageLabel.image,
     List<dynamic>? imageLabels,
     List<dynamic>? sharedwith,
   }) {
@@ -47,6 +54,8 @@ class PhotoMemo {
     timestamp = p.timestamp;
     sharedwith = [...p.sharedwith];
     imageLabels = [...p.imageLabels];
+    favorite = p.favorite;
+    emageLabel = p.emageLabel;
   }
 
   //a.copyFrom(b) ==> a = b
@@ -57,8 +66,10 @@ class PhotoMemo {
     title = p.title;
     memo = p.memo;
     photoFilename = p.photoFilename;
+    favorite = p.favorite;
     photoURL = p.photoURL;
     timestamp = p.timestamp;
+    emageLabel = p.emageLabel;
     sharedwith.clear();
     sharedwith.addAll(p.sharedwith);
     imageLabels.clear();
@@ -76,6 +87,7 @@ class PhotoMemo {
       DocKeyPhotoMemo.timestamp.name: timestamp,
       DocKeyPhotoMemo.imageLabels.name: imageLabels,
       DocKeyPhotoMemo.sharedwith.name: sharedwith,
+      DocKeyPhotoMemo.favorite.name: favorite,
     };
   }
 
@@ -92,6 +104,7 @@ class PhotoMemo {
       photoURL: doc[DocKeyPhotoMemo.photoURL.name] ??= 'N/A',
       imageLabels: doc[DocKeyPhotoMemo.imageLabels.name] ??= [],
       sharedwith: doc[DocKeyPhotoMemo.sharedwith.name] ??= [],
+      favorite: doc[DocKeyPhotoMemo.favorite.name] ??= false,
       timestamp: doc[DocKeyPhotoMemo.timestamp.name] != null
           ? DateTime.fromMillisecondsSinceEpoch(
               doc[DocKeyPhotoMemo.timestamp.name].millisecondsSinceEpoch,

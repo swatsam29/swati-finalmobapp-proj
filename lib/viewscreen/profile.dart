@@ -108,7 +108,7 @@ class _ProfileState extends State<ProfileScreen> {
                     ),
                   );
                 },
-                label: const Text("Update Account"),
+                label: const Text("Update "),
               ),
             ],
           )

@@ -45,7 +45,8 @@ class _NotificationsState extends State<NotificationsScreen> {
                 'No notificationslist!',
                 style: Theme.of(context).textTheme.headline6,
               )
-            : Column(
+            : ListView(
+              shrinkWrap: true,
                 children: List.generate(
                   con.notificationslist.length,
                   (index) {
@@ -55,7 +56,7 @@ class _NotificationsState extends State<NotificationsScreen> {
                       title: Row(
                         children: [
                           Text("@${p.email}", style: const TextStyle(color: Colors.blue),),
-                          Text(" mentioned you in ${p.title}"),
+                          Expanded(child: Text(" mentioned you in ${p.title}")),
                         ],
                       ),
                     );

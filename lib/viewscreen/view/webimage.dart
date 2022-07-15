@@ -18,12 +18,16 @@ class WebImage extends Image {
           if (loadingProcess == null) {
             return child;
           } else {
-            return CircularProgressIndicator(
-              value: loadingProcess.expectedTotalBytes != null
-                  ? loadingProcess.cumulativeBytesLoaded /
-                      loadingProcess.expectedTotalBytes!
-                  : null,
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProcess.expectedTotalBytes != null
+                    ? loadingProcess.cumulativeBytesLoaded /
+                        loadingProcess.expectedTotalBytes!
+                    : null,
+              ),
             );
           }
         });
+
+        
 }

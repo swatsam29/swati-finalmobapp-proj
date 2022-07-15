@@ -1,6 +1,8 @@
+import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lesson3/controller/firestore_controller.dart';
 import 'package:lesson3/model/constant.dart';
 import 'package:lesson3/model/photo_memo.dart';
 import 'package:lesson3/viewscreen/view/webimage.dart';
@@ -31,6 +33,7 @@ class _FavoriteState extends State<FavoriteScreen> {
     con = _Controller(this);
   }
 
+  int ra(int n) => Random().nextInt(n);
   void render(fn) => setState(fn);
 
   @override
@@ -78,7 +81,30 @@ class _FavoriteState extends State<FavoriteScreen> {
                                 : const SizedBox(
                                     height: 1.0,
                                   ),
-                        
+                            Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  FloatingActionButton.extended(
+                                    heroTag: 'dfsbsjcjscbs${ra(12313)}',
+                                    onPressed: () async {
+                                      await FirestoreController.deleteFromFav(
+                                          context, photoMemo);
+                                    },
+                                    label: Row(
+                                      children: const [
+                                        Text("Remove from favorite"),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Icon(
+                                          Icons.favorite,
+                                          color: Colors.white,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]),
                           ],
                         ),
                       ),
@@ -88,7 +114,6 @@ class _FavoriteState extends State<FavoriteScreen> {
       ),
     );
   }
-  
 }
 
 class _Controller {
@@ -100,5 +125,4 @@ class _Controller {
   _Controller(this.state) {
     photoMemoList = state.widget.photoMemoList;
   }
-
 }

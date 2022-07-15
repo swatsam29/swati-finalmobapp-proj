@@ -125,7 +125,7 @@ class _AddPhotoMemoState extends State<AddPhotoMemoScreen> {
               children: [
                 Row(
                   children: [
-                    const Text("ML Image Labeler"),
+                    const Text("ML Image Lebeler"),
                     Radio<EmageLabel>(
                       value: EmageLabel.image,
                       groupValue: _character,
@@ -222,6 +222,7 @@ class _Controller {
           photo: state.photo!, label: label);
       tempMemo.createBy = state.widget.user.email!;
       tempMemo.timestamp = DateTime.now();
+      tempMemo.emageLabel = label;
 
       String docId =
           await FirestoreController.addPhotoMemo(photoMemo: tempMemo);

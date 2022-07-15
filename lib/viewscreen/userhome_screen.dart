@@ -38,15 +38,23 @@ class _UserHomeState extends State<UserHomeScreen> {
   late _Controller con;
   late String email;
   var formKey = GlobalKey<FormState>();
+  Map<String, bool> addedToFavorite = Map();
 
   @override
   void initState() {
     super.initState();
     con = _Controller(this);
     email = widget.user.email ?? 'No email';
+    addedfavorites();
   }
 
   void render(fn) => setState(fn);
+
+  void addedfavorites() {
+    for (var photoMemo in widget.photoMemoList) {
+      addedToFavorite[photoMemo.title] = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,12 +127,12 @@ class _UserHomeState extends State<UserHomeScreen> {
               ListTile(
                 leading: const Icon(Icons.delete),
                 title: const Text('Deleted Photos'),
-                onTap:  con.deletedPhoto,
+                onTap: con.deletedPhoto,
               ),
               ListTile(
                 leading: const Icon(Icons.notification_important_sharp),
                 title: const Text('Notifications'),
-                onTap:  con.notification,
+                onTap: con.notification,
               ),
               ListTile(
                 leading: const Icon(Icons.logout),
@@ -176,8 +184,17 @@ class _UserHomeState extends State<UserHomeScreen> {
                             FloatingActionButton.extended(
                               heroTag: 'dfsiudcbsjcjscbs${ra(12313)}',
                               onPressed: () async {
-                                await FirestoreController.addToFav(
-                                    context, con.photoMemoList[index]);
+                                bool fav = addedToFavorite[
+                                        con.photoMemoList[index].title] ??
+                                    false;
+                                if (!fav) {
+                                  await FirestoreController.addToFav(
+                                      context, con.photoMemoList[index]);
+                                  setState(() {
+                                    addedToFavorite[
+                                        con.photoMemoList[index].title] = true;
+                                  });
+                                }
                               },
                               label: Row(
                                 children: const [

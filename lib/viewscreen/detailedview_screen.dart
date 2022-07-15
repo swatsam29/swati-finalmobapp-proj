@@ -36,12 +36,13 @@ class _DetailedViewScreen extends State<DetailedViewScreen> {
   bool editMode = false;
   var formkey = GlobalKey<FormState>();
 
-  EmageLabel? _character = EmageLabel.image;
+  late EmageLabel? _character;
 
   @override
   void initState() {
     super.initState();
     con = _Controller(this);
+    _character = widget.photoMemo.emageLabel;
   }
 
   void render(fn) => setState(fn);
@@ -131,13 +132,14 @@ class _DetailedViewScreen extends State<DetailedViewScreen> {
                 children: [
                   Row(
                     children: [
-                      const Text("ML Image Labeler"),
+                      const Text("ML Image Lebeler"),
                       Radio<EmageLabel>(
                         value: EmageLabel.image,
                         groupValue: _character,
                         onChanged: (EmageLabel? value) {
                           setState(() {
                             _character = value;
+                            con.updateEmageLabel(widget.photoMemo, _character!);
                           });
                         },
                       ),
@@ -152,6 +154,7 @@ class _DetailedViewScreen extends State<DetailedViewScreen> {
                         onChanged: (EmageLabel? value) {
                           setState(() {
                             _character = value;
+                            con.updateEmageLabel(widget.photoMemo, _character!);
                           });
                         },
                       ),
@@ -275,6 +278,11 @@ class _Controller {
       showSnackBar(
           context: state.context, message: 'failed to get a picture: $e');
     }
+  }
+
+  void updateEmageLabel(PhotoMemo photoMemo, EmageLabel label) async {
+    await FirestoreController.updatePhotoMemo(
+        docId: photoMemo.docId!, update: {'emageLabel': label});
   }
 
   void saveTitle(String? value) {

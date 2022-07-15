@@ -9,4 +9,12 @@ class Constant {
   static const favorite = 'photomemo_favorite';
 }
 
-enum ArgKey { user, downloadURL, filename, photoMemoList, onePhotoMemo, userProfile, notifications }
+enum ArgKey {
+  user,
+  downloadURL,
+  filename,
+  photoMemoList,
+  onePhotoMemo,
+  userProfile,
+  notifications
+}

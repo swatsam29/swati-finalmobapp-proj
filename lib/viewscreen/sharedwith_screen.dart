@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lesson3/controller/firestore_controller.dart';
+import 'package:lesson3/model/comment.dart';
 import 'package:lesson3/model/constant.dart';
 import 'package:lesson3/model/photo_memo.dart';
 import 'package:lesson3/viewscreen/addphotomemo_screen.dart';
@@ -28,6 +29,7 @@ class _SharedwithState extends State<SharedWithScreen> {
   late _Controller con;
   var formKey = GlobalKey<FormState>();
   List<dynamic> usersharedwith = <dynamic>[];
+  Map<String, int> commentsLength = Map();
 
   dynamic _searched;
 
@@ -36,15 +38,30 @@ class _SharedwithState extends State<SharedWithScreen> {
     super.initState();
     con = _Controller(this);
     sharedWith();
+    numberOfComments();
+  }
+
+  Future<void> numberOfComments() async {
+    for (var photoMemo in con.photoMemoList) {
+      List<Comment> comments =
+          await FirestoreController.getCommentList(photoid: photoMemo.docId!);
+      setState(() {
+        commentsLength[photoMemo.title] = comments.length;
+      });
+    }
   }
 
   sharedWith() {
     if (widget.photoMemoList.isNotEmpty) {
+      List<String> list = <String>[];
       for (PhotoMemo element in widget.photoMemoList) {
-        setState(() {
-          usersharedwith.addAll(element.sharedwith.toSet().toList());
-        });
+        for (var lement in element.sharedwith) {
+          list.add(lement.toString());
+        }
       }
+      setState(() {
+        usersharedwith.addAll(list.toSet().toList());
+      });
     }
 
     debugPrint("${usersharedwith}");
@@ -156,17 +173,43 @@ class _SharedwithState extends State<SharedWithScreen> {
                                     : const SizedBox(
                                         height: 1.0,
                                       ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    FloatingActionButton(
-                                      heroTag: "ewfesfs${photoMemo.docId}",
-                                      onPressed: () => con.commentButton(
-                                          context, photoMemo, widget.user),
-                                      child: const Icon(Icons.comment),
-                                    ),
-                                  ],
+                                FittedBox(
+                                  child: Stack(
+                                    alignment: const Alignment(1.4, -1.5),
+                                    children: [
+                                      FloatingActionButton(
+                                        heroTag: "ewfesfs${photoMemo.docId}",
+                                        onPressed: () {
+                                          con.commentButton(
+                                              context, photoMemo, widget.user);
+                                        },
+                                        child: const Icon(Icons.comment),
+                                      ),
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        constraints: const BoxConstraints(
+                                            minHeight: 32, minWidth: 32),
+                                        decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  spreadRadius: 1,
+                                                  blurRadius: 5,
+                                                  color: Colors.black
+                                                      .withAlpha(50))
+                                            ],
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            color: Colors.blue),
+                                        child: Center(
+                                          child: Text(
+                                            "${commentsLength[photoMemo.title]}",
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -244,9 +287,11 @@ class _Controller {
       );
       // ignore: use_build_context_synchronously
       stopCircularProgress(state.context);
-      state.render(() {
-        photoMemoList = results;
-      },);
+      state.render(
+        () {
+          photoMemoList = results;
+        },
+      );
     } catch (e) {
       stopCircularProgress(state.context);
       if (Constant.devMode) print('===== failed to search : $e');

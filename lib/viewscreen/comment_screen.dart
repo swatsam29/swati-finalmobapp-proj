@@ -167,6 +167,8 @@ class _CommentState extends State<CommentScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
                       child: com.user_image != ""
@@ -177,9 +179,6 @@ class _CommentState extends State<CommentScreen> {
                       width: 3,
                     ),
                     Text("${com.username}\n${com.comment}"),
-                    const SizedBox(
-                      width: 200,
-                    ),
                     InkWell(
                       onTap: () async {
                         await FirestoreController.deletecomment(

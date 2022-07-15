@@ -16,7 +16,7 @@ class FirestoreController {
     DocumentReference ref = await FirebaseFirestore.instance
         .collection(Constant.photoMemoCollection)
         .add(photoMemo.toFirestoreDoc());
-        addPhotoMemoNotifications(photoMemo: photoMemo);
+    addPhotoMemoNotifications(photoMemo: photoMemo);
     return ref.id;
   }
 
@@ -276,9 +276,18 @@ class FirestoreController {
 
   static Future<void> addToFav(
       BuildContext context, PhotoMemo photoMemo) async {
+    // if (!(photoMemo.favorite)) {
+    updatePhotoMemo(docId: photoMemo.docId!, update: {'favorite': true});
     await _fb.collection(Constant.favorite).add(photoMemo.toFirestoreDoc());
-
     showSnackBar(context: context, message: 'Added to Favorite');
+    // }
+  }
+
+  static Future<void> deleteFromFav(
+      BuildContext context, PhotoMemo photoMemo) async {
+    updatePhotoMemo(docId: photoMemo.docId!, update: {'favorite': false});
+    await _fb.collection(Constant.favorite).doc(photoMemo.docId).delete();
+    showSnackBar(context: context, message: 'Removed from Favorite');
   }
 
   static Future<void> deletecomment({
