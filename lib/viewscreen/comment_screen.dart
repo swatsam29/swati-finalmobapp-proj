@@ -168,7 +168,6 @@ class _CommentState extends State<CommentScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CircleAvatar(
                       child: com.user_image != ""
@@ -176,7 +175,7 @@ class _CommentState extends State<CommentScreen> {
                           : const SizedBox.shrink(),
                     ),
                     const SizedBox(
-                      width: 3,
+                      width: 6,
                     ),
                     Text("${com.username}\n${com.comment}"),
                     InkWell(
