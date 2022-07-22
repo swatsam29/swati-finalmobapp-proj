@@ -139,6 +139,20 @@ class _AddPhotoMemoState extends State<AddPhotoMemoScreen> {
                 ),
                 Row(
                   children: [
+                    const Text("ML Face Recognition"),
+                    Radio<EmageLabel>(
+                      value: EmageLabel.face,
+                      groupValue: _character,
+                      onChanged: (EmageLabel? value) {
+                        setState(() {
+                          _character = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
                     const Text("ML Text Recognition"),
                     Radio<EmageLabel>(
                       value: EmageLabel.textRecog,
@@ -222,7 +236,7 @@ class _Controller {
           photo: state.photo!, label: label);
       tempMemo.createBy = state.widget.user.email!;
       tempMemo.timestamp = DateTime.now();
-      tempMemo.emageLabel = label;
+      tempMemo.emageLabel = label.name;
 
       String docId =
           await FirestoreController.addPhotoMemo(photoMemo: tempMemo);

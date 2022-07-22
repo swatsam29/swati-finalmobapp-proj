@@ -276,11 +276,11 @@ class FirestoreController {
 
   static Future<void> addToFav(
       BuildContext context, PhotoMemo photoMemo) async {
-    // if (!(photoMemo.favorite)) {
-    updatePhotoMemo(docId: photoMemo.docId!, update: {'favorite': true});
-    await _fb.collection(Constant.favorite).add(photoMemo.toFirestoreDoc());
-    showSnackBar(context: context, message: 'Added to Favorite');
-    // }
+    if (!(photoMemo.favorite)) {
+      updatePhotoMemo(docId: photoMemo.docId!, update: {'favorite': true});
+      await _fb.collection(Constant.favorite).add(photoMemo.toFirestoreDoc());
+      showSnackBar(context: context, message: 'Added to Favorite');
+    }
   }
 
   static Future<void> deleteFromFav(

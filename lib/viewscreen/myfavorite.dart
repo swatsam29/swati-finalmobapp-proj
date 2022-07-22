@@ -88,6 +88,8 @@ class _FavoriteState extends State<FavoriteScreen> {
                                   FloatingActionButton.extended(
                                     heroTag: 'dfsbsjcjscbs${ra(12313)}',
                                     onPressed: () async {
+                                      con.state.widget.photoMemoList
+                                          .remove(photoMemo);
                                       await FirestoreController.deleteFromFav(
                                           context, photoMemo);
                                     },

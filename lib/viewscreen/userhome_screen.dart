@@ -20,13 +20,12 @@ import 'package:lesson3/viewscreen/view/view_util.dart';
 import 'package:lesson3/viewscreen/view/webimage.dart';
 
 class UserHomeScreen extends StatefulWidget {
-  const UserHomeScreen(
-      {required this.user, required this.photoMemoList, Key? key})
+  UserHomeScreen({required this.user, required this.photoMemoList, Key? key})
       : super(key: key);
   static const routeName = '/userHomeScreen';
 
   final User user;
-  final List<PhotoMemo> photoMemoList;
+  List<PhotoMemo> photoMemoList;
 
   @override
   State<StatefulWidget> createState() {
@@ -46,6 +45,14 @@ class _UserHomeState extends State<UserHomeScreen> {
     con = _Controller(this);
     email = widget.user.email ?? 'No email';
     addedfavorites();
+    loadPhotos();
+  }
+
+  void loadPhotos() async {
+    var pM = await FirestoreController.getPhotoMemoList(email: email);
+    setState(() {
+      widget.photoMemoList = pM;
+    });
   }
 
   void render(fn) => setState(fn);
@@ -209,27 +216,6 @@ class _UserHomeState extends State<UserHomeScreen> {
                                 ],
                               ),
                             ),
-                            // FloatingActionButton.extended(
-                            //   heroTag: 'dfsiudcbsscbs${ra(233)}',
-                            //   onPressed: () async {
-                            //     await FirestoreController.deleteDoc(
-                            //       photoMemo: con.photoMemoList[index],
-                            //       docId: con.photoMemoList[index].docId!,
-                            //     );
-                            //   },
-                            //   label: Row(
-                            //     children: const [
-                            //       Text("Delete"),
-                            //       SizedBox(
-                            //         width: 5,
-                            //       ),
-                            //       Icon(
-                            //         Icons.delete,
-                            //         color: Colors.red,
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
                           ],
                         )
                       ],

@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -11,7 +12,7 @@ import 'package:lesson3/model/photo_memo.dart';
 import 'package:lesson3/viewscreen/view/view_util.dart';
 import 'package:lesson3/viewscreen/view/webimage.dart';
 
-enum EmageLabel { image, textRecog }
+enum EmageLabel { image, textRecog, face }
 
 class DetailedViewScreen extends StatefulWidget {
   static const routeName = '/detailedViewScreen';
@@ -37,12 +38,15 @@ class _DetailedViewScreen extends State<DetailedViewScreen> {
   var formkey = GlobalKey<FormState>();
 
   late EmageLabel? _character;
-
   @override
   void initState() {
     super.initState();
     con = _Controller(this);
-    _character = widget.photoMemo.emageLabel;
+    _character = widget.photoMemo.emageLabel == "image"
+        ? EmageLabel.image
+        : widget.photoMemo.emageLabel == "face"
+            ? EmageLabel.face
+            : EmageLabel.textRecog;
   }
 
   void render(fn) => setState(fn);
@@ -135,6 +139,21 @@ class _DetailedViewScreen extends State<DetailedViewScreen> {
                       const Text("ML Image Lebeler"),
                       Radio<EmageLabel>(
                         value: EmageLabel.image,
+                        groupValue: _character,
+                        onChanged: (EmageLabel? value) {
+                          setState(() {
+                            _character = value;
+                            con.updateEmageLabel(widget.photoMemo, _character!);
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      const Text("ML Face Recognition"),
+                      Radio<EmageLabel>(
+                        value: EmageLabel.face,
                         groupValue: _character,
                         onChanged: (EmageLabel? value) {
                           setState(() {
@@ -280,9 +299,9 @@ class _Controller {
     }
   }
 
-  void updateEmageLabel(PhotoMemo photoMemo, EmageLabel label) async {
-    await FirestoreController.updatePhotoMemo(
-        docId: photoMemo.docId!, update: {'emageLabel': label});
+  void updateEmageLabel(PhotoMemo photoMemo, EmageLabel label) {
+    FirestoreController.updatePhotoMemo(
+        docId: photoMemo.docId!, update: {'emageLabel': label.name});
   }
 
   void saveTitle(String? value) {

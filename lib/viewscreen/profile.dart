@@ -5,7 +5,6 @@ import 'package:lesson3/controller/auth_controller.dart';
 import 'package:lesson3/model/user.dart';
 import 'package:lesson3/viewscreen/signup_screen.dart';
 import 'package:lesson3/viewscreen/start_screen.dart';
-import 'package:lesson3/viewscreen/view/view_util.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const routeName = '/profileScreen';

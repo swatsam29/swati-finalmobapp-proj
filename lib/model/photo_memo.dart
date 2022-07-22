@@ -11,7 +11,8 @@ enum DocKeyPhotoMemo {
   timestamp,
   imageLabels,
   sharedwith,
-  favorite
+  favorite,
+  emageLabel
 }
 
 class PhotoMemo {
@@ -25,7 +26,7 @@ class PhotoMemo {
   late List<dynamic> imageLabels;
   late List<dynamic> sharedwith;
   late bool favorite;
-  EmageLabel? emageLabel;
+  late String emageLabel;
 
   PhotoMemo({
     this.docId,
@@ -36,7 +37,7 @@ class PhotoMemo {
     this.photoURL = '',
     this.timestamp,
     this.favorite = false,
-    this.emageLabel = EmageLabel.image,
+    this.emageLabel = "image",
     List<dynamic>? imageLabels,
     List<dynamic>? sharedwith,
   }) {
@@ -88,6 +89,7 @@ class PhotoMemo {
       DocKeyPhotoMemo.imageLabels.name: imageLabels,
       DocKeyPhotoMemo.sharedwith.name: sharedwith,
       DocKeyPhotoMemo.favorite.name: favorite,
+      DocKeyPhotoMemo.emageLabel.name: emageLabel
     };
   }
 
@@ -105,6 +107,8 @@ class PhotoMemo {
       imageLabels: doc[DocKeyPhotoMemo.imageLabels.name] ??= [],
       sharedwith: doc[DocKeyPhotoMemo.sharedwith.name] ??= [],
       favorite: doc[DocKeyPhotoMemo.favorite.name] ??= false,
+      emageLabel: doc[DocKeyPhotoMemo.emageLabel.name] ??=
+          EmageLabel.image.name,
       timestamp: doc[DocKeyPhotoMemo.timestamp.name] != null
           ? DateTime.fromMillisecondsSinceEpoch(
               doc[DocKeyPhotoMemo.timestamp.name].millisecondsSinceEpoch,
