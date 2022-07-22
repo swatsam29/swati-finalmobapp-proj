@@ -125,7 +125,7 @@ class _AddPhotoMemoState extends State<AddPhotoMemoScreen> {
               children: [
                 Row(
                   children: [
-                    const Text("ML Image Lebeler"),
+                    const Text("ML Image Labeler"),
                     Radio<EmageLabel>(
                       value: EmageLabel.image,
                       groupValue: _character,
